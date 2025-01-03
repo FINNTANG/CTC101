@@ -1,1 +1,150 @@
-<p>Hello world, I am Finn</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                text-shadow: -2px 0 red, 2px 2px blue;
+            }
+            25% {
+                transform: translate(-2px, 2px);
+                text-shadow: 2px -2px red, -2px 0 blue;
+            }
+            50% {
+                transform: translate(2px, -2px);
+                text-shadow: 2px 0 red, -2px -2px blue;
+            }
+            75% {
+                transform: translate(-2px, -2px);
+                text-shadow: -2px 2px red, 2px 0 blue;
+            }
+            100% {
+                transform: translate(0);
+                text-shadow: -2px 0 red, 2px 2px blue;
+            }
+        }
+
+        @keyframes scan {
+            from {
+                top: -100%;
+            }
+            to {
+                top: 100%;
+            }
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+        }
+
+        .glitch-text {
+            font-size: 4em;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: glitch 0.5s infinite;
+            position: relative;
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 0, 0.1);
+            animation: scan 4s linear infinite;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-text::before {
+            color: #f0f;
+            z-index: -2;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch 3s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            color: #0ff;
+            z-index: -1;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch 2s infinite linear alternate-reverse;
+        }
+
+        .subtitle {
+            margin-top: 2em;
+            font-size: 1.2em;
+            opacity: 0.7;
+        }
+
+        .binary {
+            position: absolute;
+            font-size: 0.8em;
+            opacity: 0.3;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-line"></div>
+    <div class="container">
+        <div class="glitch-text" data-text="CYBER GLITCH">CYBER GLITCH</div>
+        <div class="subtitle">SYSTEM://INITIALIZATION_SEQUENCE</div>
+    </div>
+
+    <script>
+        // 创建随机二进制背景
+        function createBinaryBackground() {
+            const container = document.body;
+            for (let i = 0; i < 50; i++) {
+                const binary = document.createElement('div');
+                binary.className = 'binary';
+                binary.style.left = Math.random() * 100 + 'vw';
+                binary.style.top = Math.random() * 100 + 'vh';
+                binary.textContent = Math.random() > 0.5 ? '1' : '0';
+                container.appendChild(binary);
+
+                // 随机移动动画
+                setInterval(() => {
+                    binary.style.left = Math.random() * 100 + 'vw';
+                    binary.style.top = Math.random() * 100 + 'vh';
+                    binary.textContent = Math.random() > 0.5 ? '1' : '0';
+                }, 2000 + Math.random() * 3000);
+            }
+        }
+
+        createBinaryBackground();
+
+        // 添加鼠标移动效果
+        document.addEventListener('mousemove', (e) => {
+            const glitchText = document.querySelector('.glitch-text');
+            const rect = glitchText.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / 10;
+            const y = (e.clientY - rect.top) / 10;
+            
+            glitchText.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html>
